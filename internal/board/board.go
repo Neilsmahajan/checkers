@@ -32,6 +32,14 @@ type Board struct {
 	Turn Color
 }
 
+type Position struct {
+	Row, Col int
+}
+
+type Move struct {
+	StartPosition, EndPosition *Position
+}
+
 func NewBoard() *Board {
 	board := &Board{
 		Turn: Red,
@@ -77,4 +85,27 @@ func (board *Board) GetColorString(color Color) (string, error) {
 		return "Black", nil
 	}
 	return "", fmt.Errorf("No color associated with color")
+}
+
+func (board *Board) CheckValidMove(turn *Move) bool {
+	return false
+}
+
+func (board *Board) ExecuteTurn(startRow, startCol, endRow, endCol int) error {
+	startPosition := &Position{
+		startRow,
+		startCol,
+	}
+	endPosition := &Position{
+		endRow,
+		endCol,
+	}
+	turn := &Move{
+		startPosition,
+		endPosition,
+	}
+	if valid := board.CheckValidMove(turn); valid != true {
+		return fmt.Errorf("Invalid move")
+	}
+	return nil
 }
