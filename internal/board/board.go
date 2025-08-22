@@ -29,10 +29,13 @@ type Piece struct {
 
 type Board struct {
 	Grid [Height][Width]Piece
+	Turn Color
 }
 
 func NewBoard() *Board {
-	board := &Board{}
+	board := &Board{
+		Turn: Red,
+	}
 	for row := range Height {
 		for col := range Width {
 			if row <= 2 && (row+col)%2 == 0 {
@@ -62,4 +65,16 @@ func (board *Board) DrawBoard() string {
 	}
 	printedBoard += "\n  +----+----+----+----+----+----+----+----+\n"
 	return printedBoard
+}
+
+func (board *Board) GetColorString(color Color) (string, error) {
+	switch color {
+	case Empty:
+		return "Empty", nil
+	case Red:
+		return "Red", nil
+	case Black:
+		return "Black", nil
+	}
+	return "", fmt.Errorf("No color associated with color")
 }

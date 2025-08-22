@@ -1,7 +1,10 @@
 package main
 
-import "github.com/neilsmahajan/checkers/internal/cli"
+import (
+	"github.com/neilsmahajan/checkers/internal/board"
+	"github.com/neilsmahajan/checkers/internal/cli"
+)
 
 func main() {
-	cli.Run()
+	cli.Run(board.NewBoard())
 }
