@@ -87,8 +87,11 @@ func (board *Board) GetColorString(color Color) (string, error) {
 	return "", fmt.Errorf("No color associated with color")
 }
 
-func (board *Board) CheckValidMove(turn *Move) bool {
-	return true
+func (board *Board) CheckValidMove(turn *Move) error {
+	if board.Grid[turn.StartPosition.Row][turn.StartPosition.Col].Color != board.Turn {
+		return fmt.Errorf("starting position doesn't correspond to a piece")
+	}
+	return nil
 }
 
 func (board *Board) SwitchTurn() error {
@@ -116,8 +119,8 @@ func (board *Board) ExecuteTurn(startRow, startCol, endRow, endCol int) error {
 		startPosition,
 		endPosition,
 	}
-	if valid := board.CheckValidMove(move); valid != true {
-		return fmt.Errorf("invalid move")
+	if err := board.CheckValidMove(move); err != nil {
+		return fmt.Errorf("invalid move: %v", err)
 	}
 	_ = board.SwitchTurn()
 	return nil
