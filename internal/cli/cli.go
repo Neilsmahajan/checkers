@@ -14,7 +14,7 @@ func Run(board *board.Board) {
 		fmt.Printf("%s", board.DrawBoard())
 		colorString, _ := board.GetColorString(board.Turn)
 		fmt.Printf("It's %s's Turn\n", colorString)
-		fmt.Println("Input start and end positon in format A1B2")
+		fmt.Println("Input start and end positon in format <Start Row><Start Column><End Row><End Column>, (e.g. C1D2)")
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			input := scanner.Text()
@@ -37,7 +37,6 @@ func Run(board *board.Board) {
 			fmt.Printf("Your input is %s\n", input)
 			colorString, _ := board.GetColorString(board.Turn)
 			fmt.Printf("It's %s's Turn\n", colorString)
-			fmt.Println("Input start and end positon in format A1B2")
 		}
 	}
 }

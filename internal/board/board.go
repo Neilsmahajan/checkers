@@ -91,6 +91,9 @@ func (board *Board) CheckValidMove(turn *Move) error {
 	if board.Grid[turn.StartPosition.Row][turn.StartPosition.Col].Color != board.Turn {
 		return fmt.Errorf("starting position doesn't correspond to a piece")
 	}
+	if board.Grid[turn.EndPosition.Row][turn.EndPosition.Col].Color != Empty {
+		return fmt.Errorf("ending position must be empty")
+	}
 	return nil
 }
 
