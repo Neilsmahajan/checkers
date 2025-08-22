@@ -48,7 +48,7 @@ func NewBoard() *Board {
 func (board *Board) DrawBoard() string {
 	printedBoard := "    1    2    3    4    5    6    7    8"
 	for row := range Height {
-		printedBoard += fmt.Sprintf("\n  +----+----+----+----+----+----+----+----+\n%d |", row+1)
+		printedBoard += fmt.Sprintf("\n  +----+----+----+----+----+----+----+----+\n%c |", 'A'+row)
 		for col := range Width {
 			switch board.Grid[row][col].Color {
 			case Red:
