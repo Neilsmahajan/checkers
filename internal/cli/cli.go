@@ -14,7 +14,7 @@ func Run(board *board.Board) {
 		fmt.Printf("%s", board.DrawBoard())
 		colorString, _ := board.GetColorString(board.Turn)
 		fmt.Printf("It's %s's Turn\n", colorString)
-		fmt.Println("Input start and end positon in format A1,B2")
+		fmt.Println("Input start and end positon in format A1B2")
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			input := scanner.Text()
@@ -22,20 +22,22 @@ func Run(board *board.Board) {
 				fmt.Println("Quitting the game...")
 				return
 			}
-			if len(input) != 5 ||
+			if len(input) != 4 ||
 				input[0] < 'A' || input[0] > 'H' ||
 				input[1] < '1' || input[1] > '8' ||
-				input[2] != ',' ||
-				input[3] < 'A' || input[3] > 'H' ||
-				input[4] < '1' || input[4] > '8' {
+				input[2] < 'A' || input[2] > 'H' ||
+				input[3] < '1' || input[3] > '8' {
 				fmt.Println("Invalid input")
 				continue
+			}
+			if err := board.ExecuteTurn(int(input[0]-'A'), int(input[1]-'1'), int(input[2]-'A'), int(input[3]-'1')); err != nil {
+				fmt.Printf("Error executing turn %v\n", err)
 			}
 			fmt.Printf("%s", board.DrawBoard())
 			fmt.Printf("Your input is %s\n", input)
 			colorString, _ := board.GetColorString(board.Turn)
 			fmt.Printf("It's %s's Turn\n", colorString)
-			fmt.Println("Input start and end positon in format A1,B2")
+			fmt.Println("Input start and end positon in format A1B2")
 		}
 	}
 }
