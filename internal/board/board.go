@@ -1,6 +1,8 @@
 package board
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const (
 	Width  = 8
@@ -67,6 +69,22 @@ func (board *Board) NewMove(startRow, startCol, endRow, endCol int) *Move {
 			Col: endCol,
 		},
 	}
+}
+
+func (board *Board) IsValidJumpMove(move *Move) error {
+	var err error
+	if (move.EndPosition.Row == move.StartPosition.Row-2) && (move.EndPosition.Col == move.StartPosition.Col-2) {
+		err = board.CheckIfPieceIsRightColorOrPromotionForDirection(move, -1)
+	} else if (move.EndPosition.Row == move.StartPosition.Row-2) && (move.EndPosition.Col == move.StartPosition.Col+2) {
+		err = board.CheckIfPieceIsRightColorOrPromotionForDirection(move, -1)
+	} else if (move.EndPosition.Row == move.StartPosition.Row+2) && (move.EndPosition.Col == move.StartPosition.Col-2) {
+		err = board.CheckIfPieceIsRightColorOrPromotionForDirection(move, 1)
+	} else if (move.EndPosition.Row == move.StartPosition.Row+2) && (move.EndPosition.Col == move.StartPosition.Col+2) {
+		err = board.CheckIfPieceIsRightColorOrPromotionForDirection(move, 1)
+	} else {
+		return fmt.Errorf("your jump move must move by two diagonals for multiple jumps")
+	}
+	return err
 }
 
 func (board *Board) DrawBoard() string {
