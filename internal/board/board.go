@@ -92,12 +92,16 @@ func (board *Board) DrawBoard() string {
 	for row := range Height {
 		printedBoard += fmt.Sprintf("\n  +----+----+----+----+----+----+----+----+\n%c |", 'A'+row)
 		for col := range Width {
-			switch board.Grid[row][col].Color {
-			case Red:
+			switch board.Grid[row][col] {
+			case Piece{Color: Red, Promotion: Normal}:
 				printedBoard += " 🔴 |"
-			case Black:
+			case Piece{Color: Red, Promotion: Queen}:
+				printedBoard += " 🟥"
+			case Piece{Color: Black, Promotion: Normal}:
 				printedBoard += " ⚫️ |"
-			case Empty:
+			case Piece{Color: Black, Promotion: Queen}:
+				printedBoard += " ⬛️ |"
+			case Piece{Color: Empty, Promotion: Normal}:
 				printedBoard += "    |"
 			}
 		}
@@ -128,10 +132,21 @@ func (board *Board) CheckIfPieceIsRightColorOrPromotionForDirection(move *Move, 
 	return fmt.Errorf("your piece is not a queen and your move is in the wrong direction for the color")
 }
 
+func (board *Board) MakeQueenIfPossible(move *Move) {
+	if board.Turn == Red && move.EndPosition.Row == 7 {
+		board.Grid[move.EndPosition.Row][move.EndPosition.Col].Promotion = Queen
+	}
+	if board.Turn == Black && move.EndPosition.Row == 0 {
+		board.Grid[move.EndPosition.Row][move.EndPosition.Col].Promotion = Queen
+	}
+}
+
 func (board *Board) MoveOneDiagonal(move *Move) error {
 	tempPiece := board.Grid[move.StartPosition.Row][move.StartPosition.Col]
 	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color = Empty
+	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Promotion = Normal
 	board.Grid[move.EndPosition.Row][move.EndPosition.Col] = tempPiece
+	board.MakeQueenIfPossible(move)
 	return nil
 }
 
@@ -144,8 +159,11 @@ func (board *Board) JumpOverOpponentPiece(move *Move, jumpedPiece *Piece) error 
 	}
 	tempPiece := board.Grid[move.StartPosition.Row][move.StartPosition.Col]
 	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color = Empty
+	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Promotion = Normal
 	board.Grid[move.EndPosition.Row][move.EndPosition.Col] = tempPiece
 	jumpedPiece.Color = Empty
+	jumpedPiece.Promotion = Normal
+	board.MakeQueenIfPossible(move)
 	return nil
 }
 
