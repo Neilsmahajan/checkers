@@ -126,6 +126,7 @@ func (board *Board) MovePiece(move *Move) error {
 		return fmt.Errorf("ending position must be empty")
 	}
 
+	// Move by one diagonal
 	if (move.EndPosition.Row == move.StartPosition.Row-1) && (move.EndPosition.Col == move.StartPosition.Col-1 || move.EndPosition.Col == move.StartPosition.Col+1) {
 		if err := board.CheckIfPieceIsRightColorOrPromotionForDirection(move, -1); err != nil {
 			return err
@@ -138,6 +139,8 @@ func (board *Board) MovePiece(move *Move) error {
 		}
 		return board.MoveOneDiagonal(move)
 	}
+
+	// Move by two diagonals (jump over opponent piece)
 	if (move.EndPosition.Row == move.StartPosition.Row-2) && (move.EndPosition.Col == move.StartPosition.Col-2) {
 		if err := board.CheckIfPieceIsRightColorOrPromotionForDirection(move, -1); err != nil {
 			return err
