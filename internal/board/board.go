@@ -48,7 +48,7 @@ func NewBoard() *Board {
 		for col := range Width {
 			if row <= 2 && (row+col)%2 == 0 {
 				board.Grid[row][col].Color = Red
-			} else if row >= 5 && (row+col)%2 == 1 {
+			} else if row >= 5 && (row+col)%2 == 0 {
 				board.Grid[row][col].Color = Black
 			}
 		}
