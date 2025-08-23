@@ -129,8 +129,9 @@ func (board *Board) CheckIfPieceIsRightColorOrPromotionForDirection(move *Move, 
 }
 
 func (board *Board) MoveOneDiagonal(move *Move) error {
+	tempPiece := board.Grid[move.StartPosition.Row][move.StartPosition.Col]
 	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color = Empty
-	board.Grid[move.EndPosition.Row][move.EndPosition.Col].Color = board.Turn
+	board.Grid[move.EndPosition.Row][move.EndPosition.Col] = tempPiece
 	return nil
 }
 
@@ -141,9 +142,10 @@ func (board *Board) JumpOverOpponentPiece(move *Move, jumpedPiece *Piece) error 
 	if board.Turn == Black && jumpedPiece.Color != Red {
 		return fmt.Errorf("a black piece must jump over a red piece")
 	}
+	tempPiece := board.Grid[move.StartPosition.Row][move.StartPosition.Col]
 	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color = Empty
+	board.Grid[move.EndPosition.Row][move.EndPosition.Col] = tempPiece
 	jumpedPiece.Color = Empty
-	board.Grid[move.EndPosition.Row][move.EndPosition.Col].Color = board.Turn
 	return nil
 }
 
