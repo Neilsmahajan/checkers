@@ -86,6 +86,13 @@ func Run(brd *board.Board) {
 			if !validInput {
 				continue
 			}
+			// Check for win condition
+			if winner, won := brd.CheckWinCondition(); won {
+				colorString, _ := brd.GetColorString(winner)
+				fmt.Printf("%s wins!\n", colorString)
+				fmt.Printf("%s", brd.DrawBoard())
+				return
+			}
 			_ = brd.SwitchTurn()
 			fmt.Printf("%s", brd.DrawBoard())
 			colorString, _ := brd.GetColorString(brd.Turn)

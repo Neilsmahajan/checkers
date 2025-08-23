@@ -324,3 +324,24 @@ func (board *Board) ValidateMoveSequence(moves []*Move) error {
 	}
 	return nil
 }
+
+func (board *Board) CheckWinCondition() (Color, bool) {
+	redCount, blackCount := 0, 0
+	for r := range Height {
+		for c := range Width {
+			switch board.Grid[r][c].Color {
+			case Red:
+				redCount++
+			case Black:
+				blackCount++
+			}
+		}
+	}
+	if redCount == 0 {
+		return Black, true
+	}
+	if blackCount == 0 {
+		return Red, true
+	}
+	return Empty, false
+}
