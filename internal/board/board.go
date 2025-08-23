@@ -100,7 +100,6 @@ func (board *Board) CheckIfPieceIsRightColorOrPromotionForDirection(move *Move, 
 func (board *Board) MoveOneDiagonal(move *Move) error {
 	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color = Empty
 	board.Grid[move.EndPosition.Row][move.EndPosition.Col].Color = board.Turn
-	_ = board.SwitchTurn()
 	return nil
 }
 
@@ -114,7 +113,6 @@ func (board *Board) JumpOverOpponentPiece(move *Move, jumpedPiece *Piece) error 
 	board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color = Empty
 	jumpedPiece.Color = Empty
 	board.Grid[move.EndPosition.Row][move.EndPosition.Col].Color = board.Turn
-	_ = board.SwitchTurn()
 	return nil
 }
 
