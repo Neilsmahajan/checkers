@@ -56,6 +56,19 @@ func NewBoard() *Board {
 	return board
 }
 
+func (board *Board) NewMove(startRow, startCol, endRow, endCol int) *Move {
+	return &Move{
+		StartPosition: &Position{
+			Row: startRow,
+			Col: startCol,
+		},
+		EndPosition: &Position{
+			Row: endRow,
+			Col: endCol,
+		},
+	}
+}
+
 func (board *Board) DrawBoard() string {
 	printedBoard := "    1    2    3    4    5    6    7    8"
 	for row := range Height {
@@ -180,20 +193,7 @@ func (board *Board) SwitchTurn() error {
 	return nil
 }
 
-func (board *Board) ExecuteTurn(startRow, startCol, endRow, endCol int) error {
-	startPosition := &Position{
-		startRow,
-		startCol,
-	}
-	endPosition := &Position{
-		endRow,
-		endCol,
-	}
-	move := &Move{
-		startPosition,
-		endPosition,
-	}
-
+func (board *Board) ExecuteMove(move *Move) error {
 	if err := board.MovePiece(move); err != nil {
 		return fmt.Errorf("invalid move: %v", err)
 	}

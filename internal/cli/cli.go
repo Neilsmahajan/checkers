@@ -43,7 +43,8 @@ func Run(board *board.Board) {
 					fmt.Println("Invalid input")
 					continue
 				}
-				if err := board.ExecuteTurn(int(input[i]-'A'), int(input[i+1]-'1'), int(input[i+2]-'A'), int(input[i+3]-'1')); err != nil {
+				move := board.NewMove(int(input[i]-'A'), int(input[i+1]-'1'), int(input[i+2]-'A'), int(input[i+3]-'1'))
+				if err := board.ExecuteMove(move); err != nil {
 					fmt.Printf("Error executing turn %v\n", err)
 				}
 			}
