@@ -97,7 +97,7 @@ func (board *Board) CheckIfPieceIsRightColorOrPromotionForDirection(move *Move, 
 	return fmt.Errorf("your piece is not a queen and your move is in the wrong direction for the color")
 }
 
-func (board *Board) CheckIfJumpingOverOpponentPiece(opponentColor Color) error {
+func (board *Board) JumpOverOpponentPiece(opponentColor Color) error {
 	switch board.Turn {
 	case Red:
 		if opponentColor != Black {
@@ -112,7 +112,13 @@ func (board *Board) CheckIfJumpingOverOpponentPiece(opponentColor Color) error {
 	return nil
 }
 
-func (board *Board) CheckDirection(move *Move) error {
+func (board *Board) MovePiece(move *Move) error {
+	if board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color != board.Turn {
+		return fmt.Errorf("starting position doesn't correspond to a piece of the right color")
+	}
+	if board.Grid[move.EndPosition.Row][move.EndPosition.Col].Color != Empty {
+		return fmt.Errorf("ending position must be empty")
+	}
 	if (move.EndPosition.Row == move.StartPosition.Row-1) && (move.EndPosition.Col == move.StartPosition.Col-1 || move.EndPosition.Col == move.StartPosition.Col+1) {
 		return board.CheckIfPieceIsRightColorOrPromotionForDirection(move, -1)
 	}
@@ -123,42 +129,28 @@ func (board *Board) CheckDirection(move *Move) error {
 		if err := board.CheckIfPieceIsRightColorOrPromotionForDirection(move, -1); err != nil {
 			return err
 		}
-		return board.CheckIfJumpingOverOpponentPiece(board.Grid[move.StartPosition.Row-1][move.EndPosition.Col-1].Color)
+		return board.JumpOverOpponentPiece(board.Grid[move.StartPosition.Row-1][move.EndPosition.Col-1].Color)
 	}
 	if (move.EndPosition.Row == move.StartPosition.Row-2) && (move.EndPosition.Col == move.StartPosition.Col+2) {
 		if err := board.CheckIfPieceIsRightColorOrPromotionForDirection(move, -1); err != nil {
 			return err
 		}
-		return board.CheckIfJumpingOverOpponentPiece(board.Grid[move.StartPosition.Row-1][move.EndPosition.Col+1].Color)
+		return board.JumpOverOpponentPiece(board.Grid[move.StartPosition.Row-1][move.EndPosition.Col+1].Color)
 
 	}
 	if (move.EndPosition.Row == move.StartPosition.Row+2) && (move.EndPosition.Col == move.StartPosition.Col-2) {
 		if err := board.CheckIfPieceIsRightColorOrPromotionForDirection(move, 1); err != nil {
 			return err
 		}
-		return board.CheckIfJumpingOverOpponentPiece(board.Grid[move.StartPosition.Row+1][move.EndPosition.Col-1].Color)
+		return board.JumpOverOpponentPiece(board.Grid[move.StartPosition.Row+1][move.EndPosition.Col-1].Color)
 	}
 	if (move.EndPosition.Row == move.StartPosition.Row+2) && (move.EndPosition.Col == move.StartPosition.Col+2) {
 		if err := board.CheckIfPieceIsRightColorOrPromotionForDirection(move, 1); err != nil {
 			return err
 		}
-		return board.CheckIfJumpingOverOpponentPiece(board.Grid[move.StartPosition.Row+1][move.EndPosition.Col+1].Color)
+		return board.JumpOverOpponentPiece(board.Grid[move.StartPosition.Row+1][move.EndPosition.Col+1].Color)
 	}
 	return fmt.Errorf("your move must move by one diagonal or two diagonals if taking an opponent piece")
-}
-
-func (board *Board) CheckValidMove(move *Move) error {
-	if board.Grid[move.StartPosition.Row][move.StartPosition.Col].Color != board.Turn {
-		return fmt.Errorf("starting position doesn't correspond to a piece of the right color")
-	}
-	if board.Grid[move.EndPosition.Row][move.EndPosition.Col].Color != Empty {
-		return fmt.Errorf("ending position must be empty")
-	}
-	if err := board.CheckDirection(move); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (board *Board) SwitchTurn() error {
@@ -187,7 +179,8 @@ func (board *Board) ExecuteTurn(startRow, startCol, endRow, endCol int) error {
 		startPosition,
 		endPosition,
 	}
-	if err := board.CheckValidMove(move); err != nil {
+
+	if err := board.MovePiece(move); err != nil {
 		return fmt.Errorf("invalid move: %v", err)
 	}
 	_ = board.SwitchTurn()
