@@ -34,7 +34,6 @@ func Run(board *board.Board) {
 				fmt.Printf("Error executing turn %v\n", err)
 			}
 			fmt.Printf("%s", board.DrawBoard())
-			fmt.Printf("Your input is %s\n", input)
 			colorString, _ := board.GetColorString(board.Turn)
 			fmt.Printf("It's %s's Turn\n", colorString)
 		}
