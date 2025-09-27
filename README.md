@@ -176,4 +176,10 @@ Built as a practice project in Go; inspired by classic board game mechanics.
 
 ---
 
+## Author
+
+Neil Mahajan  
+Email: <neilsmahajan@gmail.com>  
+Links: https://links.neilsmahajan.com
+
 Feel free to reach out if you have suggestions or feature ideas.
